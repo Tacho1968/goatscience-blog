@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import Subscribe from './Subscribe.astro';
+import type { Lang } from '../config';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  altUrl: string;
+  subscribe?: boolean;
+}
+const { lang, title, altUrl, subscribe = true } = Astro.props;
+---
+
+<Base lang={lang} title={title} altUrl={altUrl}>
+  <section class="wrap page">
+    <h1>{title}</h1>
+    <div class="prose"><slot /></div>
+  </section>
+  {subscribe && <Subscribe lang={lang} />}
+</Base>
+
+<style>
+  .page {
+    padding-top: 3rem;
+  }
+  h1 {
+    font-size: var(--step-4);
+    font-weight: 800;
+    margin-bottom: 1.75rem;
+  }
+  .prose :global(.todo) {
+    background: var(--surface);
+    border-left: 3px solid var(--ochre-bright);
+    padding: 0.75rem 1rem;
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+</style>

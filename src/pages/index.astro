@@ -1,0 +1,24 @@
+---
+// Portada raíz: envía a cada visitante a su idioma (español por defecto).
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Goat Science</title>
+    <meta http-equiv="refresh" content="0; url=/es/" />
+    <link rel="alternate" hreflang="es" href="https://goatscience.ulpgc.es/es/" />
+    <link rel="alternate" hreflang="en" href="https://goatscience.ulpgc.es/en/" />
+    <script is:inline>
+      try {
+        var l = (navigator.languages && navigator.languages[0]) || navigator.language || 'es';
+        location.replace(l.toLowerCase().indexOf('es') === 0 ? '/es/' : '/en/');
+      } catch (e) {}
+    </script>
+  </head>
+  <body style="font-family: system-ui; padding: 2rem">
+    <p><a href="/es/">Español</a> | <a href="/en/">English</a></p>
+  </body>
+</html>

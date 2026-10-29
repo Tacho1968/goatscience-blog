@@ -1,0 +1,140 @@
+:root {
+  --bg: #f1f3ee;
+  --surface: #e6eae2;
+  --ink: #17211c;
+  --muted: #5d665f;
+  --green: #1e3a2b;
+  --ochre: #9a7114;
+  --ochre-bright: #b98a1e;
+  --rule: #cdd3c9;
+  --focus: #b98a1e;
+
+  --font-head: 'Bricolage Grotesque Variable', system-ui, sans-serif;
+  --font-body: 'Literata Variable', Georgia, serif;
+
+  --step--1: 0.875rem;
+  --step-0: 1.0625rem;
+  --step-1: 1.3125rem;
+  --step-2: 1.75rem;
+  --step-3: 2.5rem;
+  --step-4: clamp(2.75rem, 7vw, 4.5rem);
+  --step-5: clamp(6rem, 22vw, 13rem);
+
+  --measure: 66ch;
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #131a16;
+    --surface: #1b241f;
+    --ink: #e7ebe4;
+    --muted: #9ca69e;
+    --green: #9ec4a9;
+    --ochre: #d9ad4a;
+    --ochre-bright: #d9ad4a;
+    --rule: #2c3830;
+    color-scheme: dark;
+  }
+}
+:root[data-theme='dark'] {
+  --bg: #131a16;
+  --surface: #1b241f;
+  --ink: #e7ebe4;
+  --muted: #9ca69e;
+  --green: #9ec4a9;
+  --ochre: #d9ad4a;
+  --ochre-bright: #d9ad4a;
+  --rule: #2c3830;
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  line-height: 1.65;
+  font-optical-sizing: auto;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-head);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--green);
+  margin: 0;
+}
+
+a {
+  color: var(--green);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.wrap {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.prose {
+  max-width: var(--measure);
+}
+.prose h2 {
+  font-size: var(--step-2);
+  margin: 2.5rem 0 0.75rem;
+}
+.prose p,
+.prose ul,
+.prose ol {
+  margin: 0 0 1.1rem;
+}
+.prose li + li {
+  margin-top: 0.35rem;
+}
+.prose blockquote {
+  margin: 1.5rem 0;
+  padding-left: 1.25rem;
+  border-left: 3px solid var(--ochre-bright);
+  color: var(--muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

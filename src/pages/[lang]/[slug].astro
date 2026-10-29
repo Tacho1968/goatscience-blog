@@ -1,0 +1,214 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Subscribe from '../../components/Subscribe.astro';
+import { LANGS, type Lang } from '../../config';
+import { t, dateFmt } from '../../i18n';
+import { postsFor, slugOf, urlOf, translationOf } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const lang of LANGS) {
+    for (const post of await postsFor(lang)) {
+      paths.push({ params: { lang, slug: slugOf(post) }, props: { post } });
+    }
+  }
+  return paths;
+}
+
+const { post } = Astro.props;
+const lang = Astro.params.lang as Lang;
+const s = t[lang];
+const { Content } = await render(post);
+const a = post.data.articulo;
+const tr = await translationOf(post);
+const other: Lang = lang === 'es' ? 'en' : 'es';
+const link = a.doi ? `https://doi.org/${a.doi}` : a.url;
+---
+
+<Base lang={lang} title={post.data.titulo} description={post.data.idea} altUrl={tr ? urlOf(tr) : `/${other}/`}>
+  <article class="wrap post">
+    <header class="head">
+      <p class="issue">
+        <span class="n">{s.issue} {post.data.numero}</span>
+        <time datetime={post.data.fecha.toISOString()}>{dateFmt(post.data.fecha, lang)}</time>
+      </p>
+      <h1>{post.data.titulo}</h1>
+      <p class="idea">{post.data.idea}</p>
+      {
+        tr && (
+          <p class="tr">
+            <a href={urlOf(tr)} hreflang={other} lang={other}>
+              {s.otherLang}
+            </a>
+          </p>
+        )
+      }
+    </header>
+
+    <div class="cols">
+      <aside class="card" aria-labelledby="paper-h">
+        <h2 id="paper-h">{s.paper}</h2>
+        <p class="ptitle">{a.titulo}</p>
+        <dl>
+          <dt>{s.authors}</dt>
+          <dd>{a.autores}</dd>
+          <dt>{s.journal}</dt>
+          <dd><em>{a.revista}</em></dd>
+          <dt>{s.year}</dt>
+          <dd>{a.anio}</dd>
+          {
+            a.doi && (
+              <>
+                <dt>DOI</dt>
+                <dd class="doi">{a.doi}</dd>
+              </>
+            )
+          }
+        </dl>
+        <p class="access" data-open={a.accesoAbierto ? 'yes' : 'no'}>{a.accesoAbierto ? s.openAccess : s.paywalled}</p>
+        {link && <a class="orig" href={link} rel="noopener">{s.readOriginal}</a>}
+      </aside>
+
+      <div class="prose body">
+        <Content />
+        {
+          post.data.etiquetas.length > 0 && (
+            <p class="tags">
+              <span>{s.tags}:</span>
+              {post.data.etiquetas.map((e) => (
+                <span class="tag">{e}</span>
+              ))}
+            </p>
+          )
+        }
+      </div>
+    </div>
+  </article>
+
+  <Subscribe lang={lang} />
+</Base>
+
+<style>
+  .post {
+    padding-top: 3rem;
+  }
+  .head {
+    max-width: 50rem;
+  }
+  .issue {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    align-items: baseline;
+    margin: 0 0 1rem;
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+  .issue .n {
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: var(--step-1);
+    color: var(--ochre);
+  }
+  h1 {
+    font-size: var(--step-4);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+  .idea {
+    font-size: var(--step-1);
+    line-height: 1.5;
+    margin: 1.25rem 0 0;
+    max-width: 52ch;
+  }
+  .tr {
+    margin: 1rem 0 0;
+    font-family: var(--font-head);
+    font-size: var(--step--1);
+  }
+  .cols {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.5rem 4rem;
+    margin-top: 3rem;
+  }
+  @media (min-width: 60rem) {
+    .cols {
+      grid-template-columns: minmax(0, 1fr) 20rem;
+    }
+    .card {
+      order: 2;
+      position: sticky;
+      top: 1.5rem;
+      align-self: start;
+    }
+  }
+  .card {
+    background: var(--surface);
+    border-left: 4px solid var(--ochre-bright);
+    padding: 1.25rem 1.25rem 1.5rem;
+    font-size: var(--step--1);
+    line-height: 1.5;
+  }
+  .card h2 {
+    font-size: var(--step-0);
+    color: var(--muted);
+    font-weight: 700;
+  }
+  .ptitle {
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: var(--step-1);
+    line-height: 1.25;
+    color: var(--green);
+    margin: 0.5rem 0 1rem;
+  }
+  dl {
+    margin: 0;
+    display: grid;
+    gap: 0.15rem;
+  }
+  dt {
+    color: var(--muted);
+    margin-top: 0.5rem;
+  }
+  dd {
+    margin: 0;
+  }
+  .doi {
+    overflow-wrap: anywhere;
+  }
+  .access {
+    margin: 1rem 0 0;
+    color: var(--muted);
+  }
+  .access[data-open='yes'] {
+    color: var(--green);
+    font-weight: 600;
+  }
+  .orig {
+    display: inline-block;
+    margin-top: 1rem;
+    font-family: var(--font-head);
+    font-weight: 700;
+  }
+  .body :global(h2:first-child) {
+    margin-top: 0;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: 2.5rem;
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+  .tag {
+    padding: 0.15rem 0.6rem;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    color: var(--ink);
+  }
+</style>

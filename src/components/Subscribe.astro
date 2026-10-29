@@ -1,0 +1,137 @@
+---
+import { SUBSCRIBE, ROUTES, type Lang } from '../config';
+import { t } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const s = t[lang];
+const cfg = SUBSCRIBE[lang];
+const ready = cfg.formAction.trim() !== '';
+const id = `sub-${lang}`;
+---
+
+<section class="sub" id="suscribir" aria-labelledby={`${id}-h`}>
+  <div class="wrap inner">
+    <div class="copy">
+      <h2 id={`${id}-h`}>{s.subTitle}</h2>
+      <p>{s.subText}</p>
+    </div>
+
+    {
+      ready ? (
+        <form class="form" action={cfg.formAction} method="post" target="_blank">
+          <label for={`${id}-email`} class="visually-hidden">
+            {s.subEmail}
+          </label>
+          <div class="row">
+            <input
+              id={`${id}-email`}
+              type="email"
+              name={cfg.emailField}
+              placeholder={s.subEmail}
+              autocomplete="email"
+              required
+            />
+            <button type="submit">{s.subButton}</button>
+          </div>
+          <input type="hidden" name="language" value={lang} />
+          <label class="consent">
+            <input type="checkbox" required />
+            <span>
+              {s.subConsent} <a href={ROUTES.privacy[lang]}>{s.subPrivacy}</a>.
+            </span>
+          </label>
+        </form>
+      ) : (
+        <div class="pending">
+          <p>{s.subPending}</p>
+          <a href={`/${lang}/rss.xml`}>{s.rss}</a>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .sub {
+    --on: #eef1ea;
+    background: #1e3a2b;
+    color: var(--on);
+    margin-top: 5rem;
+  }
+  .inner {
+    display: grid;
+    gap: 1.5rem 3rem;
+    padding-block: 3rem;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  @media (min-width: 52rem) {
+    .inner {
+      grid-template-columns: 1fr 1fr;
+      align-items: end;
+    }
+  }
+  h2 {
+    color: var(--on);
+    font-size: var(--step-3);
+  }
+  .copy p {
+    margin: 0.75rem 0 0;
+    max-width: 44ch;
+    opacity: 0.85;
+  }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  input[type='email'] {
+    flex: 1 1 14rem;
+    min-width: 0;
+    font: inherit;
+    padding: 0.8rem 1rem;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    background: #f8faf5;
+    color: #17211c;
+  }
+  button {
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: var(--step-0);
+    padding: 0.8rem 1.4rem;
+    border: 0;
+    border-radius: 6px;
+    background: #d9ad4a;
+    color: #17211c;
+    cursor: pointer;
+  }
+  button:hover {
+    filter: brightness(1.08);
+  }
+  .consent {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+    margin-top: 0.9rem;
+    font-size: var(--step--1);
+    opacity: 0.9;
+  }
+  .consent input {
+    margin-top: 0.3rem;
+    accent-color: var(--ochre-bright);
+  }
+  .sub a {
+    color: var(--on);
+  }
+  .pending {
+    border-left: 3px solid var(--ochre-bright);
+    padding-left: 1rem;
+  }
+  .pending p {
+    margin: 0 0 0.5rem;
+    max-width: 46ch;
+  }
+</style>

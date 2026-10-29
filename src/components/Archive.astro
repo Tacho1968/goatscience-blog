@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import IssueList from './IssueList.astro';
+import Subscribe from './Subscribe.astro';
+import { ROUTES, type Lang } from '../config';
+import { t } from '../i18n';
+import { postsFor } from '../lib/posts';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const s = t[lang];
+const posts = await postsFor(lang);
+const other: Lang = lang === 'es' ? 'en' : 'es';
+---
+
+<Base lang={lang} title={s.archiveTitle} altUrl={ROUTES.archive[other]}>
+  <section class="wrap page">
+    <h1>{s.archiveTitle}</h1>
+    <p class="lead">{s.archiveIntro}</p>
+    {posts.length ? <IssueList lang={lang} posts={posts} /> : <p>{s.empty}</p>}
+  </section>
+  <Subscribe lang={lang} />
+</Base>
+
+<style>
+  .page {
+    padding-top: 3rem;
+  }
+  h1 {
+    font-size: var(--step-4);
+    font-weight: 800;
+  }
+  .lead {
+    color: var(--muted);
+    margin: 0.75rem 0 2rem;
+  }
+</style>

@@ -1,0 +1,89 @@
+---
+import type { Lang } from '../config';
+import { t, dateFmt } from '../i18n';
+import { urlOf, type Post } from '../lib/posts';
+
+interface Props {
+  lang: Lang;
+  posts: Post[];
+}
+const { lang, posts } = Astro.props;
+const s = t[lang];
+---
+
+<ol class="issues" reversed>
+  {
+    posts.map((p) => (
+      <li>
+        <a href={urlOf(p)}>
+          <span class="n" aria-hidden="true">{p.data.numero}</span>
+          <span class="body">
+            <span class="title">{p.data.titulo}</span>
+            <span class="meta">
+              <time datetime={p.data.fecha.toISOString()}>{dateFmt(p.data.fecha, lang)}</time>
+              <span class="src">
+                {p.data.articulo.revista}, {p.data.articulo.anio}
+              </span>
+            </span>
+          </span>
+          <span class="visually-hidden">
+            {s.issue} {p.data.numero}
+          </span>
+        </a>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .issues {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--rule);
+  }
+  li {
+    border-bottom: 1px solid var(--rule);
+  }
+  a {
+    display: grid;
+    grid-template-columns: 4.5rem minmax(0, 1fr);
+    gap: 1rem;
+    align-items: baseline;
+    padding: 1.1rem 0.25rem;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  a:hover .title {
+    text-decoration: underline;
+    text-decoration-color: var(--ochre-bright);
+    text-underline-offset: 0.2em;
+  }
+  .n {
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: var(--step-3);
+    line-height: 1;
+    color: var(--ochre);
+    font-variant-numeric: tabular-nums;
+  }
+  .title {
+    display: block;
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: var(--step-1);
+    line-height: 1.25;
+    color: var(--green);
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    margin-top: 0.35rem;
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+  .src {
+    font-style: italic;
+  }
+</style>
