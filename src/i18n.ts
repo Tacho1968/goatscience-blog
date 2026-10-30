@@ -46,8 +46,12 @@ export const t = {
     subPrivacy: 'política de privacidad',
     rss: 'Seguir por RSS',
     disclaimer:
-      'Los resúmenes son una lectura personal del artículo original y no lo sustituyen. Para citar, usa siempre la referencia original.',
+      'Los resúmenes son una lectura personal del artículo original y no lo sustituyen. Para citar los resultados, usa siempre la referencia original.',
     langName: 'Español',
+    licenseText: 'Licencia:',
+    licenseFeed: 'Resúmenes publicados con licencia CC BY 4.0. Anastasio Argüello.',
+    thisSummary: 'Este resumen',
+    citeAs: 'Cómo citar este resumen',
     switchTo: 'English',
   },
   en: {
@@ -95,8 +99,12 @@ export const t = {
     subPrivacy: 'privacy policy',
     rss: 'Follow via RSS',
     disclaimer:
-      'These summaries are a personal reading of the original paper and do not replace it. Always cite the original reference.',
+      'These summaries are a personal reading of the original paper and do not replace it. To cite the findings, always use the original reference.',
     langName: 'English',
+    licenseText: 'Licence:',
+    licenseFeed: 'Summaries published under a CC BY 4.0 licence. Anastasio Argüello.',
+    thisSummary: 'This summary',
+    citeAs: 'How to cite this summary',
     switchTo: 'Español',
   },
 } satisfies Record<Lang, unknown>;

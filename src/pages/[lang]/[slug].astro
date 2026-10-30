@@ -2,7 +2,7 @@
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Subscribe from '../../components/Subscribe.astro';
-import { LANGS, type Lang } from '../../config';
+import { LANGS, SITE, LICENSE, type Lang } from '../../config';
 import { t, dateFmt } from '../../i18n';
 import { postsFor, slugOf, urlOf, translationOf } from '../../lib/posts';
 
@@ -24,9 +24,23 @@ const a = post.data.articulo;
 const tr = await translationOf(post);
 const other: Lang = lang === 'es' ? 'en' : 'es';
 const link = a.doi ? `https://doi.org/${a.doi}` : a.url;
+const selfDoi = post.data.doi;
+const selfUrl = selfDoi ? `https://doi.org/${selfDoi}` : new URL(urlOf(post), Astro.site).href;
+const year = post.data.fecha.getUTCFullYear();
+const isoDate = post.data.fecha.toISOString().slice(0, 10);
+const citeTitle = /[.?!]$/.test(post.data.titulo) ? post.data.titulo : `${post.data.titulo}.`;
 ---
 
 <Base lang={lang} title={post.data.titulo} description={post.data.idea} altUrl={tr ? urlOf(tr) : `/${other}/`}>
+  <Fragment slot="head">
+    <meta name="citation_title" content={post.data.titulo} />
+    <meta name="citation_author" content="Argüello, Anastasio" />
+    <meta name="citation_publication_date" content={isoDate.replaceAll('-', '/')} />
+    <meta name="citation_journal_title" content={SITE.title} />
+    <meta name="citation_language" content={lang} />
+    {selfDoi && <meta name="citation_doi" content={selfDoi} />}
+    <meta name="DC.rights" content={LICENSE.url} />
+  </Fragment>
   <article class="wrap post">
     <header class="head">
       <p class="issue">
@@ -35,6 +49,13 @@ const link = a.doi ? `https://doi.org/${a.doi}` : a.url;
       </p>
       <h1>{post.data.titulo}</h1>
       <p class="idea">{post.data.idea}</p>
+      {
+        selfDoi && (
+          <p class="selfdoi">
+            DOI: <a href={`https://doi.org/${selfDoi}`}>{selfDoi}</a>
+          </p>
+        )
+      }
       {
         tr && (
           <p class="tr">
@@ -72,6 +93,16 @@ const link = a.doi ? `https://doi.org/${a.doi}` : a.url;
 
       <div class="prose body">
         <Content />
+        <section class="cite" aria-labelledby="cite-h">
+          <h2 id="cite-h">{s.citeAs}</h2>
+          <p>
+            Argüello A ({year}). {citeTitle} <em>{SITE.title}</em>, {s.issue} {post.data.numero}.{' '}
+            <a href={selfUrl}>{selfUrl}</a>
+          </p>
+          <p class="lic">
+            {s.licenseText} <a href={LICENSE.url} rel="license">{LICENSE.name}</a>
+          </p>
+        </section>
         {
           post.data.etiquetas.length > 0 && (
             <p class="tags">
@@ -121,6 +152,28 @@ const link = a.doi ? `https://doi.org/${a.doi}` : a.url;
     line-height: 1.5;
     margin: 1.25rem 0 0;
     max-width: 52ch;
+  }
+  .selfdoi {
+    margin: 1rem 0 0;
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+  .cite {
+    margin-top: 3rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+  .cite h2 {
+    font-size: var(--step-0);
+    margin: 0 0 0.5rem;
+  }
+  .cite p {
+    margin: 0 0 0.5rem;
+  }
+  .cite a {
+    overflow-wrap: anywhere;
   }
   .tr {
     margin: 1rem 0 0;

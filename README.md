@@ -61,6 +61,24 @@ Para que Plesk descargue los cambios en cuanto GitHub termina, busca en la ficha
 en Plesk la URL de *webhook* y añádela en GitHub en *Settings > Webhooks*. Si no aparece o
 prefieres no configurarlo, usa en Plesk el botón para extraer los cambios cada vez que publiques.
 
+## DOI de cada resumen (Rogue Scholar)
+
+La versión inglesa de cada resumen se archiva en [Rogue Scholar](https://rogue-scholar.org), que le
+asigna un DOI a partir del RSS en inglés: https://goatscience.ulpgc.es/en/rss.xml
+
+Por eso:
+
+- Los resúmenes se publican con licencia **CC BY 4.0** (se indica en cada página y en el RSS).
+- El RSS lleva el texto completo de cada resumen y la referencia del artículo original.
+
+Cuando Rogue Scholar asigne el DOI a un resumen, añádelo a la cabecera del archivo en inglés:
+
+```yaml
+doi: "10.xxxxx/xxxxx"
+```
+
+La página mostrará entonces el DOI y lo usará en "How to cite this summary".
+
 ## Suscripción por correo
 
 La suscripción es manual. Los lectores escriben a `tacho@ulpgc.es` con el asunto

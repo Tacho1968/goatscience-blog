@@ -6,6 +6,13 @@ export type Lang = (typeof LANGS)[number];
 export const SITE = {
   title: 'Goat Science',
   author: 'Anastasio Argüello',
+  orcid: 'https://orcid.org/0000-0002-4426-0678',
+};
+
+// Licencia de los resúmenes (necesaria para Rogue Scholar).
+export const LICENSE = {
+  name: 'CC BY 4.0',
+  url: 'https://creativecommons.org/licenses/by/4.0/',
 };
 
 // SUSCRIPCIÓN POR CORREO

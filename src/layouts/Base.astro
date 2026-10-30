@@ -3,7 +3,7 @@ import '@fontsource-variable/bricolage-grotesque';
 import '@fontsource-variable/literata';
 import '@fontsource-variable/literata/wght-italic.css';
 import '../styles/global.css';
-import { SITE, ROUTES, type Lang } from '../config';
+import { SITE, ROUTES, LICENSE, type Lang } from '../config';
 import { t } from '../i18n';
 
 interface Props {
@@ -33,6 +33,7 @@ const canonical = new URL(path, Astro.site);
     <link rel="alternate" hreflang={other} href={new URL(switchUrl, Astro.site)} />
     <link rel="alternate" type="application/rss+xml" title={`${SITE.title} (${s.langName})`} href={`/${lang}/rss.xml`} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <slot name="head" />
     <meta property="og:title" content={title ?? SITE.title} />
     <meta property="og:description" content={desc} />
     <meta property="og:type" content="website" />
@@ -61,6 +62,9 @@ const canonical = new URL(path, Astro.site);
       <div class="wrap foot">
         <p class="who">{SITE.author}. {s.authorRole}.</p>
         <p class="disc">{s.disclaimer}</p>
+        <p class="disc">
+          {s.licenseText} <a href={LICENSE.url} rel="license">{LICENSE.name}</a>
+        </p>
         <p class="links">
           <a href={`/${lang}/rss.xml`}>{s.rss}</a>
           <a href={ROUTES.privacy[lang]}>{s.subPrivacy[0].toUpperCase() + s.subPrivacy.slice(1)}</a>

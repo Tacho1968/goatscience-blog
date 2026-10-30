@@ -5,6 +5,7 @@ titulo: "[Título del resumen: la pregunta del estudio en lenguaje llano]"
 idea: "[La idea clave en una o dos frases: lo que el lector debe recordar si solo lee esto.]"
 etiquetas: ["[tema 1]", "[tema 2]"]
 borrador: false
+# doi: "10.xxxxx/xxxxx"   # DOI de este resumen, cuando Rogue Scholar lo asigne (solo versión inglesa)
 articulo:
   titulo: "[Título original del artículo]"
   autores: "[Apellido A, Apellido B, Apellido C]"

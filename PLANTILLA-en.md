@@ -5,6 +5,7 @@ titulo: "[Summary title: the study's question in plain words]"
 idea: "[The key idea in one or two sentences: what readers should remember if they read nothing else.]"
 etiquetas: ["[topic 1]", "[topic 2]"]
 borrador: false
+# doi: "10.xxxxx/xxxxx"   # DOI de este resumen, cuando Rogue Scholar lo asigne (solo versión inglesa)
 articulo:
   titulo: "[Original paper title]"
   autores: "[Surname A, Surname B, Surname C]"

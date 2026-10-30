@@ -13,6 +13,7 @@ const resumenes = defineCollection({
     idea: z.string(),
     etiquetas: z.array(z.string()).default([]),
     borrador: z.boolean().default(false),
+    doi: z.string().optional(), // DOI de este resumen (lo asigna Rogue Scholar)
     articulo: z.object({
       titulo: z.string(),
       autores: z.string(),
