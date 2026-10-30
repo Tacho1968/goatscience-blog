@@ -1,5 +1,5 @@
 ---
-import { SUBSCRIBE, ROUTES, type Lang } from '../config';
+import { SUBSCRIBE_EMAIL, ROUTES, type Lang } from '../config';
 import { t } from '../i18n';
 
 interface Props {
@@ -7,9 +7,12 @@ interface Props {
 }
 const { lang } = Astro.props;
 const s = t[lang];
-const cfg = SUBSCRIBE[lang];
-const ready = cfg.formAction.trim() !== '';
 const id = `sub-${lang}`;
+
+const mailto = (subject: string, body: string) =>
+  `mailto:${SUBSCRIBE_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+const subscribeHref = mailto(s.subMailSubject, s.subMailBody);
+const unsubscribeHref = mailto(s.unsubMailSubject, s.unsubMailBody);
 ---
 
 <section class="sub" id="suscribir" aria-labelledby={`${id}-h`}>
@@ -19,38 +22,22 @@ const id = `sub-${lang}`;
       <p>{s.subText}</p>
     </div>
 
-    {
-      ready ? (
-        <form class="form" action={cfg.formAction} method="post" target="_blank">
-          <label for={`${id}-email`} class="visually-hidden">
-            {s.subEmail}
-          </label>
-          <div class="row">
-            <input
-              id={`${id}-email`}
-              type="email"
-              name={cfg.emailField}
-              placeholder={s.subEmail}
-              autocomplete="email"
-              required
-            />
-            <button type="submit">{s.subButton}</button>
-          </div>
-          <input type="hidden" name="language" value={lang} />
-          <label class="consent">
-            <input type="checkbox" required />
-            <span>
-              {s.subConsent} <a href={ROUTES.privacy[lang]}>{s.subPrivacy}</a>.
-            </span>
-          </label>
-        </form>
-      ) : (
-        <div class="pending">
-          <p>{s.subPending}</p>
-          <a href={`/${lang}/rss.xml`}>{s.rss}</a>
-        </div>
-      )
-    }
+    <div class="how">
+      <p>
+        {s.subHow} <a href={subscribeHref}>{SUBSCRIBE_EMAIL}</a>{' '}{s.subHow2}
+      </p>
+      <ul>
+        {s.subFields.map((f) => <li>{f}</li>)}
+      </ul>
+      <a class="btn" href={subscribeHref}>{s.subButton}</a>
+      <p class="small">
+        {s.unsubText} <a href={unsubscribeHref}>{s.unsubLink}</a>. {s.subPrivacyPre}{' '}
+        <a href={ROUTES.privacy[lang]}>{s.subPrivacy}</a>.
+      </p>
+      <p class="small">
+        <a href={`/${lang}/rss.xml`}>{s.rss}</a>
+      </p>
+    </div>
   </div>
 </section>
 
@@ -70,7 +57,7 @@ const id = `sub-${lang}`;
   @media (min-width: 52rem) {
     .inner {
       grid-template-columns: 1fr 1fr;
-      align-items: end;
+      align-items: start;
     }
   }
   h2 {
@@ -82,56 +69,38 @@ const id = `sub-${lang}`;
     max-width: 44ch;
     opacity: 0.85;
   }
-  .row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
+  .how p {
+    margin: 0 0 0.5rem;
+    max-width: 48ch;
   }
-  input[type='email'] {
-    flex: 1 1 14rem;
-    min-width: 0;
-    font: inherit;
-    padding: 0.8rem 1rem;
-    border: 2px solid transparent;
-    border-radius: 6px;
-    background: #f8faf5;
-    color: #17211c;
+  .how ul {
+    margin: 0 0 1.25rem;
+    padding-left: 1.2rem;
   }
-  button {
+  .how li + li {
+    margin-top: 0.2rem;
+  }
+  .btn {
+    display: inline-block;
     font-family: var(--font-head);
     font-weight: 700;
     font-size: var(--step-0);
     padding: 0.8rem 1.4rem;
-    border: 0;
     border-radius: 6px;
     background: #d9ad4a;
-    color: #17211c;
-    cursor: pointer;
+    color: #17211c !important;
+    text-decoration: none;
+    margin-bottom: 1rem;
   }
-  button:hover {
+  .btn:hover {
     filter: brightness(1.08);
   }
-  .consent {
-    display: flex;
-    gap: 0.6rem;
-    align-items: flex-start;
-    margin-top: 0.9rem;
+  .small {
     font-size: var(--step--1);
-    opacity: 0.9;
-  }
-  .consent input {
-    margin-top: 0.3rem;
-    accent-color: var(--ochre-bright);
+    opacity: 0.85;
   }
   .sub a {
     color: var(--on);
-  }
-  .pending {
-    border-left: 3px solid var(--ochre-bright);
-    padding-left: 1rem;
-  }
-  .pending p {
-    margin: 0 0 0.5rem;
-    max-width: 46ch;
+    overflow-wrap: anywhere;
   }
 </style>

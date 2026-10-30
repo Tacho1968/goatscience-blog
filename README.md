@@ -63,29 +63,19 @@ prefieres no configurarlo, usa en Plesk el botón para extraer los cambios cada 
 
 ## Suscripción por correo
 
-Una web estática no puede guardar correos por sí misma, así que la suscripción la gestiona un
-servicio de boletines externo. Lo práctico es usar uno con **envío automático desde RSS**: cada vez
-que publicas un resumen, el servicio lee el RSS del blog y manda el correo solo.
+La suscripción es manual. Los lectores escriben a `tacho@ulpgc.es` con el asunto
+«Alta Goat Science» (o «Subscribe Goat Science» en inglés) e indican su nombre, el idioma y,
+si quieren, su perfil y su país. Para darse de baja, escriben con el asunto «Baja Goat Science»
+(o «Unsubscribe Goat Science»).
 
-El blog ya publica un RSS por idioma:
+Cada semana:
 
-- https://goatscience.ulpgc.es/es/rss.xml
-- https://goatscience.ulpgc.es/en/rss.xml
+1. Envía el correo con el resumen a la lista de cada idioma, **siempre en copia oculta (CCO)**.
+2. Atiende las bajas y bórralas de la lista.
 
-Dos servicios con esa función son MailerLite y Buttondown (hay más). Compara precios y
-condiciones en sus webs, que cambian.
-
-Cuando tengas el servicio:
-
-1. Crea una lista por idioma (o una sola con un campo de idioma).
-2. Configura la campaña automática desde el RSS de cada idioma.
-3. Copia la dirección `action` del formulario de alta que te da el servicio y el nombre de su campo
-   de correo, y pégalos en `src/config.ts`, en `SUBSCRIBE`.
-4. Hasta que `formAction` tenga valor, la web muestra que la suscripción llegará pronto y ofrece el RSS.
-
-**Antes de activarla**, completa la política de privacidad (`src/pages/es/privacidad.astro` y
-`src/pages/en/privacy.astro`) con el servicio de protección de datos de la ULPGC: vas a tratar
-correos electrónicos de personas y el dominio es institucional.
+La dirección de correo se cambia en `src/config.ts` (`SUBSCRIBE_EMAIL`) y los textos en `src/i18n.ts`.
+La política de privacidad está en `src/pages/es/privacidad.astro` y `src/pages/en/privacy.astro`;
+es provisional y debe revisarla el servicio de protección de datos de la ULPGC.
 
 ## Trabajar en tu ordenador (opcional)
 

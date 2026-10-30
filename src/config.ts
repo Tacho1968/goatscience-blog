@@ -9,15 +9,9 @@ export const SITE = {
 };
 
 // SUSCRIPCIÓN POR CORREO
-// La web es estática: no guarda correos por sí misma. Los guarda un servicio
-// externo de boletines. Cuando lo elijas, pega aquí la dirección (action) de su
-// formulario de alta y el nombre del campo de correo que espera ese servicio.
-// Puedes usar una lista por idioma o la misma para los dos.
-// Mientras `formAction` esté vacío, el formulario indica que está pendiente.
-export const SUBSCRIBE: Record<Lang, { formAction: string; emailField: string }> = {
-  es: { formAction: '', emailField: 'email' },
-  en: { formAction: '', emailField: 'email' },
-};
+// Por ahora la suscripción es manual: los lectores escriben a esta dirección
+// y el boletín se envía a mano cada semana, siempre en copia oculta (CCO).
+export const SUBSCRIBE_EMAIL = 'tacho@ulpgc.es';
 
 // Direcciones de las páginas fijas en cada idioma.
 export const ROUTES: Record<'archive' | 'about' | 'privacy', Record<Lang, string>> = {
