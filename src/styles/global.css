@@ -138,3 +138,21 @@ a:hover {
     transition: none !important;
   }
 }
+
+/* Chino: las tipografías del blog no tienen caracteres chinos; se usan las del sistema. */
+:lang(zh) {
+  --font-head: 'Bricolage Grotesque Variable', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
+    'Noto Sans CJK SC', 'Source Han Sans SC', sans-serif;
+  --font-body: 'Literata Variable', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC',
+    'Source Han Sans SC', sans-serif;
+}
+:lang(zh) body {
+  line-height: 1.85;
+}
+:lang(zh) :is(h1, h2, h3) {
+  letter-spacing: 0;
+  line-height: 1.3;
+}
+:lang(zh) em {
+  font-style: normal;
+}

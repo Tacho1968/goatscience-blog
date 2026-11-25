@@ -1,6 +1,6 @@
 // Ajustes generales del blog. Cambia aquí los textos y la suscripción.
 
-export const LANGS = ['es', 'en'] as const;
+export const LANGS = ['es', 'en', 'zh'] as const;
 export type Lang = (typeof LANGS)[number];
 
 export const SITE = {
@@ -22,7 +22,13 @@ export const SUBSCRIBE_EMAIL = 'tacho@ulpgc.es';
 
 // Direcciones de las páginas fijas en cada idioma.
 export const ROUTES: Record<'archive' | 'about' | 'privacy', Record<Lang, string>> = {
-  archive: { es: '/es/archivo/', en: '/en/archive/' },
-  about: { es: '/es/acerca/', en: '/en/about/' },
-  privacy: { es: '/es/privacidad/', en: '/en/privacy/' },
+  archive: { es: '/es/archivo/', en: '/en/archive/', zh: '/zh/archive/' },
+  about: { es: '/es/acerca/', en: '/en/about/', zh: '/zh/about/' },
+  privacy: { es: '/es/privacidad/', en: '/en/privacy/', zh: '/zh/privacy/' },
 };
+
+// Nombre de cada idioma en su propio idioma (para el selector).
+export const LANG_NAMES: Record<Lang, string> = { es: 'Español', en: 'English', zh: '中文' };
+
+// Página de inicio de cada idioma.
+export const HOMES: Record<Lang, string> = { es: '/es/', en: '/en/', zh: '/zh/' };

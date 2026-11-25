@@ -1,6 +1,6 @@
 ---
 import type { Lang } from '../config';
-import { t, dateFmt } from '../i18n';
+import { t, dateFmt, issueLabel } from '../i18n';
 import { urlOf, type Post } from '../lib/posts';
 
 interface Props {
@@ -27,7 +27,7 @@ const s = t[lang];
             </span>
           </span>
           <span class="visually-hidden">
-            {s.issue} {p.data.numero}
+            {issueLabel(lang, p.data.numero)}
           </span>
         </a>
       </li>

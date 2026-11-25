@@ -24,15 +24,14 @@ const unsubscribeHref = mailto(s.unsubMailSubject, s.unsubMailBody);
 
     <div class="how">
       <p>
-        {s.subHow} <a href={subscribeHref}>{SUBSCRIBE_EMAIL}</a>{' '}{s.subHow2}
+        {s.subHow}{s.sp}<a href={subscribeHref}>{SUBSCRIBE_EMAIL}</a>{s.subHow2.startsWith('，') ? '' : ' '}{s.subHow2}
       </p>
       <ul>
         {s.subFields.map((f) => <li>{f}</li>)}
       </ul>
       <a class="btn" href={subscribeHref}>{s.subButton}</a>
       <p class="small">
-        {s.unsubText} <a href={unsubscribeHref}>{s.unsubLink}</a>. {s.subPrivacyPre}{' '}
-        <a href={ROUTES.privacy[lang]}>{s.subPrivacy}</a>.
+        {s.unsubText}{s.sp}<a href={unsubscribeHref}>{s.unsubLink}</a>{s.stop}{s.sp}{s.subPrivacyPre}{s.sp}<a href={ROUTES.privacy[lang]}>{s.subPrivacy}</a>{s.stop}
       </p>
       <p class="small">
         <a href={`/${lang}/rss.xml`}>{s.rss}</a>

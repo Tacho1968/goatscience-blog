@@ -2,9 +2,9 @@
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Subscribe from '../../components/Subscribe.astro';
-import { LANGS, SITE, LICENSE, type Lang } from '../../config';
-import { t, dateFmt } from '../../i18n';
-import { postsFor, slugOf, urlOf, translationOf } from '../../lib/posts';
+import { LANGS, SITE, LICENSE, LANG_NAMES, type Lang } from '../../config';
+import { t, dateFmt, issueLabel } from '../../i18n';
+import { postsFor, slugOf, urlOf, translationsOf } from '../../lib/posts';
 
 export async function getStaticPaths() {
   const paths = [];
@@ -21,8 +21,9 @@ const lang = Astro.params.lang as Lang;
 const s = t[lang];
 const { Content } = await render(post);
 const a = post.data.articulo;
-const tr = await translationOf(post);
-const other: Lang = lang === 'es' ? 'en' : 'es';
+const trs = await translationsOf(post);
+const trLangs = (Object.keys(trs) as Lang[]).filter((l) => trs[l]);
+const alts = Object.fromEntries(trLangs.map((l) => [l, urlOf(trs[l]!)]));
 const link = a.doi ? `https://doi.org/${a.doi}` : a.url;
 const selfDoi = post.data.doi;
 const selfUrl = selfDoi ? `https://doi.org/${selfDoi}` : new URL(urlOf(post), Astro.site).href;
@@ -31,7 +32,7 @@ const isoDate = post.data.fecha.toISOString().slice(0, 10);
 const citeTitle = /[.?!]$/.test(post.data.titulo) ? post.data.titulo : `${post.data.titulo}.`;
 ---
 
-<Base lang={lang} title={post.data.titulo} description={post.data.idea} altUrl={tr ? urlOf(tr) : `/${other}/`}>
+<Base lang={lang} title={post.data.titulo} description={post.data.idea} alts={alts}>
   <Fragment slot="head">
     <meta name="citation_title" content={post.data.titulo} />
     <meta name="citation_author" content="Argüello, Anastasio" />
@@ -44,7 +45,7 @@ const citeTitle = /[.?!]$/.test(post.data.titulo) ? post.data.titulo : `${post.d
   <article class="wrap post">
     <header class="head">
       <p class="issue">
-        <span class="n">{s.issue} {post.data.numero}</span>
+        <span class="n">{issueLabel(lang, post.data.numero)}</span>
         <time datetime={post.data.fecha.toISOString()}>{dateFmt(post.data.fecha, lang)}</time>
       </p>
       <h1>{post.data.titulo}</h1>
@@ -57,11 +58,17 @@ const citeTitle = /[.?!]$/.test(post.data.titulo) ? post.data.titulo : `${post.d
         )
       }
       {
-        tr && (
+        trLangs.length > 0 && (
           <p class="tr">
-            <a href={urlOf(tr)} hreflang={other} lang={other}>
-              {s.otherLang}
-            </a>
+            {s.readIn}{' '}
+            {trLangs.map((l, i) => (
+              <>
+                {i > 0 && (lang === 'zh' ? '、' : ', ')}
+                <a href={urlOf(trs[l]!)} hreflang={l} lang={l}>
+                  {LANG_NAMES[l]}
+                </a>
+              </>
+            ))}
           </p>
         )
       }
@@ -96,7 +103,7 @@ const citeTitle = /[.?!]$/.test(post.data.titulo) ? post.data.titulo : `${post.d
         <section class="cite" aria-labelledby="cite-h">
           <h2 id="cite-h">{s.citeAs}</h2>
           <p>
-            Argüello A ({year}). {citeTitle} <em>{SITE.title}</em>, {s.issue} {post.data.numero}.{' '}
+            Argüello A ({year}). {citeTitle} <em>{SITE.title}</em>, {issueLabel(lang, post.data.numero)}.{' '}
             <a href={selfUrl}>{selfUrl}</a>
           </p>
           <p class="lic">

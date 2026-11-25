@@ -1,18 +1,18 @@
 ---
 import Base from '../layouts/Base.astro';
 import Subscribe from './Subscribe.astro';
-import type { Lang } from '../config';
+import { ROUTES, type Lang } from '../config';
 
 interface Props {
   lang: Lang;
   title: string;
-  altUrl: string;
+  page?: keyof typeof ROUTES; // página fija equivalente en los otros idiomas
   subscribe?: boolean;
 }
-const { lang, title, altUrl, subscribe = true } = Astro.props;
+const { lang, title, page, subscribe = true } = Astro.props;
 ---
 
-<Base lang={lang} title={title} altUrl={altUrl}>
+<Base lang={lang} title={title} alts={page ? ROUTES[page] : {}}>
   <section class="wrap page">
     <h1>{title}</h1>
     <div class="prose"><slot /></div>

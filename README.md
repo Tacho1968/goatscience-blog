@@ -1,6 +1,6 @@
 # Goat Science
 
-Blog bilingüe (español e inglés) de resúmenes semanales de artículos científicos sobre cabras.
+Blog trilingüe (español, inglés y chino) de resúmenes semanales de artículos científicos sobre cabras.
 Web: https://goatscience.ulpgc.es
 
 Está hecho con [Astro](https://astro.build) y genera una web estática: solo HTML, CSS y archivos
@@ -9,8 +9,8 @@ finales, sin base de datos ni nada que mantener en el servidor.
 ## Cómo publicar el resumen de la semana
 
 1. Copia `PLANTILLA-es.md` en `src/content/resumenes/es/` y `PLANTILLA-en.md` en
-   `src/content/resumenes/en/`.
-2. Ponles **el mismo nombre** a los dos archivos, en minúsculas y con guiones, por ejemplo
+   `src/content/resumenes/en/`. La versión china va en `src/content/resumenes/zh/` con la misma cabecera.
+2. Ponles **el mismo nombre** a los tres archivos, en minúsculas y con guiones, por ejemplo
    `calostro-cabras-majoreras.md`. Ese nombre será la dirección de la página y es lo que enlaza
    la versión en español con la inglesa.
 3. Rellena la cabecera (número, fecha, título, idea clave, datos del artículo) y las cinco secciones.

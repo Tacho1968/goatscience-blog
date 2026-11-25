@@ -13,10 +13,9 @@ const { lang } = Astro.props;
 const s = t[lang];
 const posts = await postsFor(lang);
 const [latest, ...rest] = posts;
-const other: Lang = lang === 'es' ? 'en' : 'es';
 ---
 
-<Base lang={lang} altUrl={`/${other}/`}>
+<Base lang={lang}>
   <section class="wrap intro">
     <p class="tag">{s.tagline}</p>
   </section>
@@ -27,10 +26,11 @@ const other: Lang = lang === 'es' ? 'en' : 'es';
         <div class="num" aria-hidden="true">
           <span class="lbl">{s.issue}</span>
           <span class="big">{latest.data.numero}</span>
+          {s.issueAfter && <span class="lbl">{s.issueAfter}</span>}
         </div>
         <div class="txt">
           <p class="when">
-            {s.latest}, <time datetime={latest.data.fecha.toISOString()}>{dateFmt(latest.data.fecha, lang)}</time>
+            {s.latest}{lang === 'zh' ? '，' : ', '}<time datetime={latest.data.fecha.toISOString()}>{dateFmt(latest.data.fecha, lang)}</time>
           </p>
           <h1 id="latest-h">
             <a href={urlOf(latest)}>{latest.data.titulo}</a>

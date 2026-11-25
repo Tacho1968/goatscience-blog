@@ -1,5 +1,5 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
-import type { Lang } from '../config';
+import { LANGS, type Lang } from '../config';
 
 export type Post = CollectionEntry<'resumenes'>;
 
@@ -15,8 +15,13 @@ export async function postsFor(lang: Lang) {
   return all.sort((a, b) => b.data.fecha.valueOf() - a.data.fecha.valueOf());
 }
 
-export async function translationOf(p: Post) {
-  const other: Lang = langOf(p) === 'es' ? 'en' : 'es';
-  const list = await postsFor(other);
-  return list.find((x) => slugOf(x) === slugOf(p));
+/** Versiones del mismo resumen en los otros idiomas (solo las que existen). */
+export async function translationsOf(p: Post) {
+  const out: Partial<Record<Lang, Post>> = {};
+  for (const l of LANGS) {
+    if (l === langOf(p)) continue;
+    const found = (await postsFor(l)).find((x) => slugOf(x) === slugOf(p));
+    if (found) out[l] = found;
+  }
+  return out;
 }

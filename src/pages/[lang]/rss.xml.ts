@@ -3,7 +3,7 @@ import type { APIContext } from 'astro';
 import MarkdownIt from 'markdown-it';
 import sanitizeHtml from 'sanitize-html';
 import { LANGS, SITE, LICENSE, type Lang } from '../../config';
-import { t } from '../../i18n';
+import { t, issueLabel } from '../../i18n';
 import { postsFor, urlOf } from '../../lib/posts';
 
 const md = new MarkdownIt();
@@ -33,7 +33,7 @@ export async function GET(context: APIContext) {
       const body = md.render(p.body ?? '');
       const lic = `<p>${esc(s.licenseText)} <a href="${LICENSE.url}">${LICENSE.name}</a>.</p>`;
       return {
-        title: `${s.issue} ${p.data.numero}: ${p.data.titulo}`,
+        title: `${issueLabel(lang, p.data.numero)}${lang === 'zh' ? '：' : ': '}${p.data.titulo}`,
         pubDate: p.data.fecha,
         description: p.data.idea,
         content: sanitizeHtml(ref + body + lic, {

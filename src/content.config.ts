@@ -2,10 +2,10 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
-// Cada resumen vive en src/content/resumenes/es/ y src/content/resumenes/en/.
-// Usa el MISMO nombre de archivo en las dos carpetas para que queden enlazados.
+// Cada resumen vive en src/content/resumenes/es/, /en/ y /zh/.
+// Usa el MISMO nombre de archivo en las tres carpetas para que queden enlazados.
 const resumenes = defineCollection({
-  loader: glob({ pattern: '{es,en}/*.md', base: './src/content/resumenes' }),
+  loader: glob({ pattern: '{es,en,zh}/*.md', base: './src/content/resumenes' }),
   schema: z.object({
     numero: z.number().int().positive(),
     fecha: z.coerce.date(),

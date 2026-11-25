@@ -3,34 +3,34 @@ import '@fontsource-variable/bricolage-grotesque';
 import '@fontsource-variable/literata';
 import '@fontsource-variable/literata/wght-italic.css';
 import '../styles/global.css';
-import { SITE, ROUTES, LICENSE, type Lang } from '../config';
+import { SITE, ROUTES, LICENSE, LANGS, LANG_NAMES, HOMES, type Lang } from '../config';
 import { t } from '../i18n';
 
 interface Props {
   lang: Lang;
   title?: string;
   description?: string;
-  altUrl?: string; // misma página en el otro idioma
+  alts?: Partial<Record<Lang, string>>; // misma página en los otros idiomas
 }
-const { lang, title, description, altUrl } = Astro.props;
+const { lang, title, description, alts = {} } = Astro.props;
 const s = t[lang];
-const other: Lang = lang === 'es' ? 'en' : 'es';
+const others = LANGS.filter((l) => l !== lang);
+const altOf = (l: Lang) => alts[l] ?? HOMES[l];
 const pageTitle = title ? `${title} | ${SITE.title}` : `${SITE.title}: ${s.tagline}`;
 const desc = description ?? s.description;
 const path = Astro.url.pathname;
-const switchUrl = altUrl ?? `/${other}/`;
 const canonical = new URL(path, Astro.site);
 ---
 
 <!doctype html>
-<html lang={lang}>
+<html lang={lang === 'zh' ? 'zh-Hans' : lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={desc} />
     <link rel="canonical" href={canonical} />
-    <link rel="alternate" hreflang={other} href={new URL(switchUrl, Astro.site)} />
+    {others.map((l) => <link rel="alternate" hreflang={l === 'zh' ? 'zh-Hans' : l} href={new URL(altOf(l), Astro.site)} />)}
     <link rel="alternate" type="application/rss+xml" title={`${SITE.title} (${s.langName})`} href={`/${lang}/rss.xml`} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <slot name="head" />
@@ -39,17 +39,23 @@ const canonical = new URL(path, Astro.site);
     <meta property="og:type" content="website" />
   </head>
   <body>
-    <a class="skip visually-hidden" href="#main">{lang === 'es' ? 'Saltar al contenido' : 'Skip to content'}</a>
+    <a class="skip visually-hidden" href="#main">{s.skip}</a>
     <header class="site-head">
       <div class="wrap bar">
         <a class="mark" href={`/${lang}/`} aria-label={SITE.title}>
           <span>Goat Science</span>
         </a>
-        <nav aria-label={lang === 'es' ? 'Principal' : 'Main'}>
+        <nav aria-label={s.navLabel}>
           <a href={ROUTES.archive[lang]} aria-current={path === ROUTES.archive[lang] ? 'page' : undefined}>{s.nav.archive}</a>
           <a href={ROUTES.about[lang]} aria-current={path === ROUTES.about[lang] ? 'page' : undefined}>{s.nav.about}</a>
           <a href="#suscribir">{s.nav.subscribe}</a>
-          <a class="lang" href={switchUrl} hreflang={other} lang={other}>{s.switchTo}</a>
+          <span class="langs" role="group" aria-label={s.langLabel}>
+            {others.map((l) => (
+              <a class="lang" href={altOf(l)} hreflang={l} lang={l}>
+                {LANG_NAMES[l]}
+              </a>
+            ))}
+          </span>
         </nav>
       </div>
     </header>
@@ -126,6 +132,12 @@ const canonical = new URL(path, Astro.site);
   nav a[aria-current='page'] {
     color: var(--green);
     box-shadow: inset 0 -2px 0 var(--ochre-bright);
+  }
+  .langs {
+    display: inline-flex;
+    gap: 0.9rem;
+    padding-left: 1rem;
+    border-left: 1px solid var(--rule);
   }
   nav .lang {
     color: var(--muted);
